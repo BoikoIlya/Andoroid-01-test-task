@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Android01</string>
+    <string name="cities_title">Гарады</string>
+    <string name="places_title">Месцы</string>
+    <string name="no_connection_message">Няма iнтэрнет злучэння</string>
+    <string name="service_is_unavailable">Сервис недаступны</string>
+    <string name="timeout_message">Занадта доугi час адказу</string>
+</resources>

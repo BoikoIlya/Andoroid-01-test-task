@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <TextView
+        android:layout_marginHorizontal="20dp"
+        android:id="@+id/detailsNameTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/places_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/h2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        />
+
+
+    <ProgressBar
+        android:layout_marginTop="20dp"
+        android:id="@+id/detailsProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailsNameTitle"
+        />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_marginTop="20dp"
+        android:id="@+id/detailsViewPager"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailsProgress"
+        />
+
+    <SeekBar
+        android:layout_marginTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailsViewPager"
+        android:id="@+id/seekBar"
+        android:layout_marginHorizontal="20dp"
+        android:secondaryProgressTint="@color/grey"
+        android:secondaryProgress="100"
+        android:progressBackgroundTint="@color/grey"
+        />
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:id="@+id/playBtn"
+        android:layout_marginTop="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        android:background="@drawable/play_selector"
+        android:textOn=""
+        android:textOff=""
+        />
+
+    <TextView
+        android:layout_marginHorizontal="20dp"
+        android:id="@+id/placeDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/places_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/body1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playBtn"
+        android:layout_marginTop="20dp"
+        />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
