@@ -36,10 +36,13 @@ class DetailsFragment: Fragment(R.layout.fragment_details) {
 
     private val binding by viewBinding(FragmentDetailsBinding::bind)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(savedInstanceState!=null) viewModel.initFragmentAfterConfigurationChanged()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if(savedInstanceState!=null) viewModel.initFragmentAfterConfigurationChanged()
 
         val adapter = ViewPagerAdapter(imageLoader)
         binding.detailsViewPager.adapter = adapter
