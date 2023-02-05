@@ -5,6 +5,8 @@ import android.media.MediaPlayer
 import android.provider.DocumentsContract.Root
 import androidx.room.Room
 import com.example.android01.core.*
+import com.example.android01.details.presentation.PlayerCommunication
+import com.example.android01.details.presentation.PlayerTimeCommunication
 import com.example.android01.places.data.cache.PlaceDao
 import com.example.android01.places.data.cache.PlacesDB
 import com.example.android01.places.presentation.PlaceUi
@@ -13,6 +15,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -105,5 +108,6 @@ interface AppBindModule{
     @Binds
     @Singleton
     fun bindHandleError(obj: HandleError.Base): HandleError
+
 
 }

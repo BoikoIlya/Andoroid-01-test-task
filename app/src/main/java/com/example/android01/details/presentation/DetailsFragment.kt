@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.android01.R
 import com.example.android01.core.ImageLoader
 import com.example.android01.databinding.FragmentDetailsBinding
 import com.example.android01.places.presentation.PlaceUi
@@ -25,61 +27,55 @@ import javax.inject.Inject
  * Created by HP on 03.02.2023.
  **/
 @AndroidEntryPoint
-class DetailsFragment: Fragment() {
+class DetailsFragment: Fragment(R.layout.fragment_details) {
 
     private val viewModel: DetailsViewModel by viewModels()
 
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    @Inject
-    lateinit var mediaPlayer: MediaPlayer
-
-    private var _binding: FragmentDetailsBinding? = null
-    private  val binding: FragmentDetailsBinding get() = _binding!!
-
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
+    private val binding by viewBinding(FragmentDetailsBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val data = viewModel.loadData()
+        if(savedInstanceState!=null) viewModel.initFragmentAfterConfigurationChanged()
 
         val adapter = ViewPagerAdapter(imageLoader)
         binding.detailsViewPager.adapter = adapter
-        val mapper = PlaceUi.ToDetailsUi(binding, adapter, mediaPlayer)
 
-        try {
-            data.map(mapper)
-        } catch (e: java.lang.Exception) {
-            Toast.makeText(requireContext(), "${e.message}", Toast.LENGTH_LONG).show()
+        val mapper = PlaceUi.ToDetailsUi(binding, adapter)
+
+        lifecycleScope.launch{
+            viewModel.collectDetails(this@DetailsFragment){
+                it.map(mapper)
+            }
         }
+
+        lifecycleScope.launch {
+            viewModel.collectDetailsState(this@DetailsFragment){
+                it.apply(
+                    binding,
+                    Toast.makeText(requireContext(), "", Toast.LENGTH_LONG)
+                )
+            }
+        }
+
+        lifecycleScope.launch{
+            viewModel.collectPlayerTime(this@DetailsFragment){
+                binding.time.text = it
+            }
+        }
+
 
         binding.playBtn.setOnClickListener {
-            if ((it as ToggleButton).isChecked) mediaPlayer.start()
-            else mediaPlayer.pause()
+            if ((it as ToggleButton).isChecked) viewModel.play()
+            else viewModel.pause()
         }
 
-        mediaPlayer.setOnCompletionListener {
-            mediaPlayer.pause()
-            binding.playBtn.isChecked = false
-        }
-        var time = 0L
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, position: Int, user: Boolean) {
-                if (user) mediaPlayer.seekTo(position)
-                time = mediaPlayer.duration.toLong() - mediaPlayer.currentPosition
-                binding.time.text = "${(time/1000)/60}:${(time/1000)%60}"
+                if (user) viewModel.seekTo(position)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -87,31 +83,7 @@ class DetailsFragment: Fragment() {
             override fun onStopTrackingTouch(p0: SeekBar?)= Unit
         })
 
-
-        mediaPlayer.setOnPreparedListener {
-            binding.seekBar.max = mediaPlayer.duration
-            binding.progress.visibility = View.GONE
-            binding.playBtn.visibility = View.VISIBLE
-            time = mediaPlayer.duration.toLong() - mediaPlayer.currentPosition
-            binding.time.text = "${(time/1000)/60}:${(time/1000)%60}"
-        }
-
-
-       lifecycleScope.launch{
-            while (true) {
-                if(mediaPlayer.isPlaying && time>=0) time -= 1000
-                binding.seekBar.progress = mediaPlayer.currentPosition
-                binding.time.text = "${(time/1000)/60}:${(time/1000)%60}"
-                delay(1000)
-            }
-        }
-
     }
 
-    override fun onDestroyView() {
-        _binding = null
-        mediaPlayer.stop()
-        super.onDestroyView()
-    }
 }
 
