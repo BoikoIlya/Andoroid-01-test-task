@@ -69,6 +69,7 @@ data class PlaceUi(
             if(sound.isEmpty()){
                 binding.seekBar.visibility = View.GONE
                 binding.playBtn.visibility = View.GONE
+                binding.progress.visibility = View.GONE
             }else {
                 mediaPlayer.reset()
                 mediaPlayer.setDataSource(sound)

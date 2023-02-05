@@ -1,19 +1,25 @@
-package com.example.android01.places.domain
+package com.example.android01.places.data.cache
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.android01.places.domain.PlaceDomain
 import com.example.android01.places.presentation.PlaceUi
 import javax.inject.Inject
 
 /**
  * Created by HP on 04.02.2023.
  **/
-data class PlaceDomain(
-   private val id: Int,
-   private val images: List<String>,
-   private val logo: String,
-   private val name: String,
-   private val sound: String,
-   private val text: String,
+@Entity(tableName = "places")
+data class PlaceCache(
+    @PrimaryKey(autoGenerate = false)
+    val id: Int,
+    val images: List<String>,
+    val logo: String,
+    val name: String,
+    val sound: String,
+    val text: String,
 ){
+
     fun <T> map(mapper: Mapper<T>): T = mapper.map(
         id, images, logo, name, sound, text
     )
@@ -29,7 +35,7 @@ data class PlaceDomain(
         ): T
     }
 
-    class ToPlaceUi @Inject constructor(): Mapper<PlaceUi>{
+    class ToPlaceDomain @Inject constructor(): Mapper<PlaceDomain>{
         override fun map(
             id: Int,
             images: List<String>,
@@ -37,8 +43,8 @@ data class PlaceDomain(
             name: String,
             sound: String,
             text: String,
-        ): PlaceUi {
-            return PlaceUi(
+        ): PlaceDomain {
+            return PlaceDomain(
                 id = id,
                 images = images,
                 logo = logo,

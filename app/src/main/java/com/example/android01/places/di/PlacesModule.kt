@@ -3,6 +3,7 @@ package com.example.android01.places.di
 
 import com.example.android01.core.*
 import com.example.android01.places.data.PlacesRepository
+import com.example.android01.places.data.cache.PlaceCache
 import com.example.android01.places.data.cloud.PlaceCloud
 import com.example.android01.places.data.cloud.PlacesService
 import com.example.android01.places.domain.PlaceDomain
@@ -34,7 +35,11 @@ interface CitiesModule {
 
     @Binds
     @ViewModelScoped
-    fun provideToDomainMapper(obj: PlaceCloud.ToPlaceDomain): PlaceCloud.Mapper<PlaceDomain>
+    fun provideToCacheMapper(obj: PlaceCloud.ToPlaceCache): PlaceCloud.Mapper<PlaceCache>
+
+    @Binds
+    @ViewModelScoped
+    fun provideToDomainMapper(obj: PlaceCache.ToPlaceDomain): PlaceCache.Mapper<PlaceDomain>
 
     @Binds
     @ViewModelScoped

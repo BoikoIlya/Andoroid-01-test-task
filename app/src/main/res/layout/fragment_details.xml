@@ -23,16 +23,6 @@
         />
 
 
-    <ProgressBar
-        android:layout_marginTop="20dp"
-        android:id="@+id/detailsProgress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailsNameTitle"
-        />
 
 
     <androidx.viewpager2.widget.ViewPager2
@@ -42,7 +32,7 @@
         android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailsProgress"
+        app:layout_constraintTop_toBottomOf="@id/detailsNameTitle"
         />
 
     <SeekBar
@@ -59,18 +49,42 @@
         android:progressBackgroundTint="@color/grey"
         />
 
-    <androidx.appcompat.widget.AppCompatToggleButton
-        android:id="@+id/playBtn"
-        android:layout_marginTop="10dp"
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        android:text="0:34"
+        android:gravity="end"
+        android:layout_marginHorizontal="30dp"
+        android:textColor="@color/black"
+        android:id="@+id/time"
+        />
+
+    <ProgressBar
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        android:id="@+id/progress"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:visibility="gone"
+        android:id="@+id/playBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress"
         android:background="@drawable/play_selector"
         android:textOn=""
         android:textOff=""
         />
+
 
     <TextView
         android:layout_marginHorizontal="20dp"

@@ -1,6 +1,6 @@
 package com.example.android01.places.data.cloud
 
-import com.example.android01.places.domain.PlaceDomain
+import com.example.android01.places.data.cache.PlaceCache
 import javax.inject.Inject
 
 data class PlaceCloud(
@@ -64,7 +64,7 @@ data class PlaceCloud(
       ): T
    }
 
-   class ToPlaceDomain @Inject constructor(): Mapper<PlaceDomain>{
+   class ToPlaceCache @Inject constructor(): Mapper<PlaceCache>{
       override fun map(
          city_id: Int,
          creation_date: String,
@@ -83,14 +83,19 @@ data class PlaceCloud(
          tags: List<Int>,
          text: String,
          visible: Boolean,
-      ): PlaceDomain {
-         return PlaceDomain(
+      ): PlaceCache {
+         var textDescription = ""
+            if(text.isNotEmpty()){
+               textDescription = text.removeRange(0,3)
+             textDescription = textDescription.removeRange(textDescription.length-4, textDescription.length)
+         }
+         return PlaceCache(
             id = id,
             images = images,
             logo = logo,
             name = name,
             sound = sound,
-            text = text
+            text = textDescription
          )
       }
 

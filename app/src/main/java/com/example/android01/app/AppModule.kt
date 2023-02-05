@@ -1,7 +1,12 @@
 package com.example.android01.app
 
 import android.content.Context
+import android.media.MediaPlayer
+import android.provider.DocumentsContract.Root
+import androidx.room.Room
 import com.example.android01.core.*
+import com.example.android01.places.data.cache.PlaceDao
+import com.example.android01.places.data.cache.PlacesDB
 import com.example.android01.places.presentation.PlaceUi
 import dagger.Binds
 import dagger.Module
@@ -62,7 +67,27 @@ class AppModule {
         )
     }
 
+    @Provides
+    @Singleton
+    fun provideDB(@ApplicationContext context: Context): PlacesDB{
+        return Room.databaseBuilder(
+                context,
+                PlacesDB::class.java,
+                "places_db"
+            ).build()
+    }
 
+    @Provides
+    @Singleton
+    fun provideDao(db: PlacesDB): PlaceDao{
+        return db.getDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMediaPlayer(): MediaPlayer {
+        return MediaPlayer()
+    }
 }
 
 @Module

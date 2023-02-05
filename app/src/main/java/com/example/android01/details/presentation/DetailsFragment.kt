@@ -16,6 +16,7 @@ import com.example.android01.core.ImageLoader
 import com.example.android01.databinding.FragmentDetailsBinding
 import com.example.android01.places.presentation.PlaceUi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,10 +32,12 @@ class DetailsFragment: Fragment() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
+    @Inject
+    lateinit var mediaPlayer: MediaPlayer
+
     private var _binding: FragmentDetailsBinding? = null
     private  val binding: FragmentDetailsBinding get() = _binding!!
 
-    private lateinit var mediaPlayer: MediaPlayer
 
 
     override fun onCreateView(
@@ -51,7 +54,6 @@ class DetailsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val data = viewModel.loadData()
-         mediaPlayer = MediaPlayer()
 
         val adapter = ViewPagerAdapter(imageLoader)
         binding.detailsViewPager.adapter = adapter
@@ -72,10 +74,12 @@ class DetailsFragment: Fragment() {
             mediaPlayer.pause()
             binding.playBtn.isChecked = false
         }
-
+        var time = 0L
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, position: Int, user: Boolean) {
                 if (user) mediaPlayer.seekTo(position)
+                time = mediaPlayer.duration.toLong() - mediaPlayer.currentPosition
+                binding.time.text = "${(time/1000)/60}:${(time/1000)%60}"
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -86,12 +90,18 @@ class DetailsFragment: Fragment() {
 
         mediaPlayer.setOnPreparedListener {
             binding.seekBar.max = mediaPlayer.duration
-
+            binding.progress.visibility = View.GONE
+            binding.playBtn.visibility = View.VISIBLE
+            time = mediaPlayer.duration.toLong() - mediaPlayer.currentPosition
+            binding.time.text = "${(time/1000)/60}:${(time/1000)%60}"
         }
 
-        lifecycleScope.launch{
+
+       lifecycleScope.launch{
             while (true) {
+                if(mediaPlayer.isPlaying && time>=0) time -= 1000
                 binding.seekBar.progress = mediaPlayer.currentPosition
+                binding.time.text = "${(time/1000)/60}:${(time/1000)%60}"
                 delay(1000)
             }
         }
@@ -99,8 +109,8 @@ class DetailsFragment: Fragment() {
     }
 
     override fun onDestroyView() {
-        mediaPlayer.release()
         _binding = null
+        mediaPlayer.stop()
         super.onDestroyView()
     }
 }
